@@ -15,15 +15,19 @@ const textInCommonCleared = fs
         /[,\.\-]/g,
         ' '
     )
+    .split('\n')
+    .map(
+        paragraph => paragraph.replace(
+            /\s+/g,
+            ' '
+        )
+    )
+    .join('\n')
 
 const textInOmuan = textInCommonCleared
     .split('\n')
     .map(
         paragraph => paragraph
-            .replace(
-                /\s+/g,
-                ' '
-            )
             .split('')
             .map(
                 letter => letter === ' '
