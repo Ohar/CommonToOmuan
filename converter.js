@@ -2,10 +2,12 @@ const fs = require('fs')
 
 const dictCommonToOmuan = require('./constants/dictCommonToOmuan')
 
-const textFileName = 'text.txt'
+const textInCommonFileName = 'text-in-common.txt'
+const textInCommonClearedFileName = 'text-in-common-cleared.txt'
+const textInOmuanFileName = 'text-in-omuan.txt'
 
-const omuan = fs
-    .readFileSync(`./${textFileName}`)
+const textInCommonCleared = fs
+    .readFileSync(`./${textInCommonFileName}`)
     .toString()
     .trim()
     .toLowerCase()
@@ -13,16 +15,24 @@ const omuan = fs
         /[,\.\-]/g,
         ' '
     )
-    .replace(
-        /\s+/g,
-        ' '
-    )
-    .split('')
-    .map(
-        letter => letter
-            ? dictCommonToOmuan[letter]
-            : ' '
-    )
-    .join('')
 
-console.log('omuan', omuan);
+const textInOmuan = textInCommonCleared
+    .split('\n')
+    .map(
+        paragraph => paragraph
+            .replace(
+                /\s+/g,
+                ' '
+            )
+            .split('')
+            .map(
+                letter => letter === ' '
+                    ? letter
+                    : dictCommonToOmuan[letter]
+            )
+            .join('')
+    )
+    .join('\n')
+
+fs.writeFileSync(`./${textInOmuanFileName}`, textInOmuan)
+fs.writeFileSync(`./${textInCommonClearedFileName}`, textInCommonCleared)
