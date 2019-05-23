@@ -1,13 +1,28 @@
-const text = require('./text.txt')
+const fs = require('fs')
 
-const dict = require('./constants/dict')
 const dictCommonToOmuan = require('./constants/dictCommonToOmuan')
-const dictOmuanToCommon = require('./constants/dictOmuanToCommon')
 
-text
+const textFileName = 'text.txt'
+
+const omuan = fs
+    .readFileSync(`./${textFileName}`)
+    .toString()
     .trim()
     .toLowerCase()
+    .replace(
+        /[,\.\-]/g,
+        ' '
+    )
     .replace(
         /\s+/g,
         ' '
     )
+    .split('')
+    .map(
+        letter => letter
+            ? dictCommonToOmuan[letter]
+            : ' '
+    )
+    .join('')
+
+console.log('omuan', omuan);
